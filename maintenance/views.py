@@ -8,6 +8,7 @@ from psycopg2 import sql
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import FileResponse
 
 
 class PostgresDBManagementView(APIView):
@@ -70,7 +71,7 @@ class PostgresDBManagementView(APIView):
                     rows = cursor.fetchall()
 
                     for row in rows:
-                        insert_sql = f"INSERT INTO {table_name} VALUES ({', '.join(map(str, row))});\n"
+                        insert_sql = f"INSERT INTO {table_name} VALUES ({', '.join(map(repr, row))});\n"
                         f.write(insert_sql)
 
                     f.write(f'-- End of dump for table: {table_name}\n\n')
@@ -78,10 +79,9 @@ class PostgresDBManagementView(APIView):
             cursor.close()
             conn.close()
 
-            return Response({
-                'message': 'Backup successful.',
-                'backup_file': backup_file
-            })
+            response = FileResponse(open(backup_file, 'rb'), as_attachment=True)
+            response['Content-Disposition'] = f'attachment; filename=db_backup_{timestamp}.sql'
+            return response
 
         except Exception as e:
             return Response({'error': str(e)}, status=500)
