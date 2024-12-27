@@ -30,6 +30,13 @@ class PostgresDBManagementView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=500)
 
+    from django.http import FileResponse
+    import os
+    from datetime import datetime
+    import psycopg2
+    from psycopg2 import sql
+    from django.conf import settings
+
     def create_backup(self):
         try:
             backup_dir = 'C:/backups'
@@ -79,10 +86,12 @@ class PostgresDBManagementView(APIView):
             cursor.close()
             conn.close()
 
-            response = FileResponse(open(backup_file, 'rb'), as_attachment=True)
-            response['Content-Disposition'] = f'attachment; filename=db_backup_{timestamp}.sql'
-            return response
+            with open(backup_file, 'rb') as f:
+                response = FileResponse(f, as_attachment=True)
+                response['Content-Disposition'] = f'attachment; filename=db_backup_{timestamp}.sql'
+                return response
 
         except Exception as e:
             return Response({'error': str(e)}, status=500)
+
 
