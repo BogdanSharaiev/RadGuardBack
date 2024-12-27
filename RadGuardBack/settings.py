@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-#j$&ab3w^plv4svbet%-a5%hkf2$o8ac2-hn-)4&t&mst(+5l2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['instance-20241227-102058', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['34.47.41.188', 'localhost', '127.0.0.1']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
