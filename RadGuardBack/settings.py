@@ -119,8 +119,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'RadGuard',
         'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
+        'PASSWORD': '12345678',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
