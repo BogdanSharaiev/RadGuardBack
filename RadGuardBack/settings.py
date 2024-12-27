@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 from datetime import timedelta
 import os
@@ -118,12 +118,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'RadGuard',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': '34.69.217.9',
+        'USER': 'RadGuard_owner',
+        'PASSWORD': 'OsMwj4Ltn6BG',
+        'HOST': 'ep-black-wind-a2qff958.eu-central-1.aws.neon.tech',
         'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
+
 
 
 
