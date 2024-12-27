@@ -8,7 +8,6 @@ from psycopg2 import sql
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import FileResponse
 
 
 class PostgresDBManagementView(APIView):
@@ -29,13 +28,6 @@ class PostgresDBManagementView(APIView):
             return Response({'message': 'Migrate succesful.'})
         except Exception as e:
             return Response({'error': str(e)}, status=500)
-
-    from django.http import FileResponse
-    import os
-    from datetime import datetime
-    import psycopg2
-    from psycopg2 import sql
-    from django.conf import settings
 
     def create_backup(self):
         try:
@@ -78,7 +70,7 @@ class PostgresDBManagementView(APIView):
                     rows = cursor.fetchall()
 
                     for row in rows:
-                        insert_sql = f"INSERT INTO {table_name} VALUES ({', '.join(map(repr, row))});\n"
+                        insert_sql = f"INSERT INTO {table_name} VALUES ({', '.join(map(str, row))});\n"
                         f.write(insert_sql)
 
                     f.write(f'-- End of dump for table: {table_name}\n\n')
@@ -86,12 +78,11 @@ class PostgresDBManagementView(APIView):
             cursor.close()
             conn.close()
 
-            with open(backup_file, 'rb') as f:
-                response = FileResponse(f, as_attachment=True)
-                response['Content-Disposition'] = f'attachment; filename=db_backup_{timestamp}.sql'
-                return response
+            return Response({
+                'message': 'Backup successful.',
+                'backup_file': backup_file
+            })
 
         except Exception as e:
             return Response({'error': str(e)}, status=500)
-
 
